@@ -1,5 +1,3 @@
-# terraform/main.tf
-
 terraform {
   required_providers {
     aws = {
@@ -9,18 +7,16 @@ terraform {
   }
 }
 
-# Definimos la región (Virginia es la más común y económica)
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
-# Ejemplo: Crear una instancia EC2 básica para el servidor de UCE FindIt
 resource "aws_instance" "backend_server" {
-  ami           = "ami-0c101f26f147fa7fd" # Amazon Linux 2 (Free Tier)
-  instance_type = "t2.micro"
+  ami           = "ami-0c101f26f147fa7fd" 
+  instance_type = var.instance_type
 
   tags = {
-    Name        = "UCE-FindIt-Server"
-    Environment = "QA"
+    Name        = "${var.project_name}-Backend-${var.environment}"
+    Environment = var.environment
   }
-}ECHO est� activado.
+}
