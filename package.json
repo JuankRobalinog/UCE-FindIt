@@ -1,20 +1,17 @@
 {
   "name": "uce-findit",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JuankRobalinog/UCE-FindIt.git"
+  "devDependencies": {
+    "turbo": "latest"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JuankRobalinog/UCE-FindIt/issues"
-  },
-  "homepage": "https://github.com/JuankRobalinog/UCE-FindIt#readme"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

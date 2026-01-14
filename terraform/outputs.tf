@@ -1,7 +1,4 @@
-output "server_public_ip" {
-  value = aws_instance.backend_server.public_ip
-}
-
-output "server_public_dns" {
-  value = aws_instance.backend_server.public_dns
+output "bastion_ip" {
+  value       = module.bastion_host.bastion_public_ip
+  description = "La IP pública para acceder al Bastión"
 }
