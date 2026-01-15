@@ -1,57 +1,42 @@
 version: '3.8'
 
 services:
-  api-gateway:
-    build: ./ms-gateway
-    ports: ["8080:8080"]
-    depends_on: [ms-items, ms-users, ms-auth, ms-notifications, ms-locations, ms-chat, ms-claims, ms-analytics, ms-storage]
-    networks: [uce-net]
+  # --- API GATEWAY (La puerta de entrada) ---
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/ms-gateway/Dockerfile
+    ports:
+      - "80:8080" # Mapeamos el puerto 80 (web) al 8080 del gateway
+    environment:
+      - NODE_ENV=production
+    networks:
+      - uce-network
+    restart: always
 
+  # --- MICROSERVICIO DE OBJETOS ---
   ms-items:
-    build: ./ms-items
-    environment: [PORT=3001]
-    networks: [uce-net]
+    build:
+      context: .
+      dockerfile: ./apps/ms-items/Dockerfile
+    environment:
+      - PORT=3001
+    networks:
+      - uce-network
+    restart: always
 
+  # --- MICROSERVICIO DE USUARIOS ---
   ms-users:
-    build: ./ms-users
-    environment: [PORT=3002]
-    networks: [uce-net]
+    build:
+      context: .
+      dockerfile: ./apps/ms-users/Dockerfile
+    environment:
+      - PORT=3002
+    networks:
+      - uce-network
+    restart: always
 
-  ms-auth:
-    build: ./ms-auth
-    environment: [PORT=3003]
-    networks: [uce-net]
-
-  ms-notifications:
-    build: ./ms-notifications
-    environment: [PORT=3004]
-    networks: [uce-net]
-
-  ms-locations:
-    build: ./ms-locations
-    environment: [PORT=3005]
-    networks: [uce-net]
-
-  ms-chat:
-    build: ./ms-chat
-    environment: [PORT=3006]
-    networks: [uce-net]
-
-  ms-claims:
-    build: ./ms-claims
-    environment: [PORT=3007]
-    networks: [uce-net]
-
-  ms-analytics:
-    build: ./ms-analytics
-    environment: [PORT=3008]
-    networks: [uce-net]
-
-  ms-storage:
-    build: ./ms-storage
-    environment: [PORT=3009]
-    networks: [uce-net]
-
+# Red interna para que los microservicios se hablen entre ellos
 networks:
-  uce-net:
+  uce-network:
     driver: bridge
