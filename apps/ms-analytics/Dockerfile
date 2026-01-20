@@ -1,18 +1,19 @@
 ﻿FROM node:18-alpine
 WORKDIR /app
 
-# Copiamos solo lo necesario para instalar (desde la raíz)
+# Copiamos archivos base de la raíz
 COPY package*.json ./
 COPY turbo.json ./
 
+# Instalamos todas las dependencias del monorepo
 RUN npm install
 
-# Copiamos todo el código
+# Copiamos el resto del código
 COPY . .
 
-# ¡PASO VITAL! Compilamos el código
-RUN npm run build
+# Compilamos específicamente este microservicio
+RUN npm run build --filter=ms-users
 
-# Ajustamos el comando para que busque el archivo generado en 'dist'
-# Si tu build genera archivos en apps/ms-users/dist/index.js, esta es la ruta:
+# Verificamos que el archivo existe y lo ejecutamos
+# NOTA: Si usas NestJS, la ruta suele ser apps/ms-users/dist/main.js
 CMD ["node", "apps/ms-users/dist/index.js"]
