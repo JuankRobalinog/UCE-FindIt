@@ -7,11 +7,13 @@ terraform {
   }
 }
 
- provider "aws" {
+# --- PROVEEDOR Y RED PRINCIPAL ---
+
+provider "aws" {
   region     = var.aws_region
-  access_key = var.access_key  
-  secret_key = var.secret_key  
-  token      = var.token     
+  access_key = var.access_key
+  secret_key = var.secret_key
+  token      = var.token
 }
 
 resource "aws_vpc" "uce_vpc" {
@@ -30,10 +32,15 @@ resource "aws_subnet" "public_1" {
     Name = "${var.project_name}-public-subnet"
   }
 }
+
+# --- EL PUENTE AL MUNDO (INTERNET GATEWAY) ---
+
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.uce_vpc.id
-  tags = { Name = "${var.project_name}-igw" }
+  tags   = { Name = "${var.project_name}-igw" }
 }
+
+# --- EL MAPA DE RUTAS (ROUTE TABLE) ---
 
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.uce_vpc.id
@@ -44,7 +51,6 @@ resource "aws_route_table" "public" {
   }
 }
 
-# Conectar el mapa con tu subred actual
 resource "aws_route_table_association" "public_assoc" {
   subnet_id      = aws_subnet.public_1.id
   route_table_id = aws_route_table.public.id
@@ -57,4 +63,5 @@ module "bastion_host" {
   vpc_id           = aws_vpc.uce_vpc.id
   public_subnet_id = aws_subnet.public_1.id
   instance_type    = var.instance_type
+  key_name         = "vockey" # Asegúrate de que este nombre sea el que usa AWS Academy
 }

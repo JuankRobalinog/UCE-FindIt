@@ -1,19 +1,20 @@
-﻿# Usa una imagen ligera de Node
-FROM node:18-alpine
-
-# Directorio de trabajo
+﻿FROM node:18-alpine
 WORKDIR /app
 
-# Copiamos archivos de dependencias
+# 1. Copiamos los archivos de la raíz necesarios para instalar dependencias
 COPY package*.json ./
+COPY turbo.json ./ 
 
-# Instalamos solo lo necesario para producción
-RUN npm install --only=production
+# 2. Instalamos dependencias (esto detectará los workspaces)
+RUN npm install
 
-# Copiamos el código del microservicio
+# 3. Copiamos el código de ESTE microservicio específicamente
+# Asegúrate de que el contexto del build sea la raíz del monorepo
 COPY . .
 
-# Exponemos el puerto (cambia según el servicio)
-EXPOSE 3005
+# 4. Compilamos el microservicio (ajusta el nombre según tu package.json)
+RUN npx turbo run build --filter=ms-users
 
-CMD ["npm", "start"]
+# 5. ¡ESTA ES LA RUTA CORRECTA! 
+# Apuntamos a donde Turbo o NestJS dejan el archivo final
+CMD ["node", "apps/ms-users/dist/index.js"]
