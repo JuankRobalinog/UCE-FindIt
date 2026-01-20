@@ -11,9 +11,8 @@ RUN npm install
 # Copiamos el resto del código
 COPY . .
 
-# Compilamos específicamente este microservicio
-RUN npm run build --filter=ms-users
+# Compilamos específicamente el GATEWAY
+RUN npm run build --filter=ms-gateway
 
-# Verificamos que el archivo existe y lo ejecutamos
-# NOTA: Si usas NestJS, la ruta suele ser apps/ms-users/dist/main.js
-CMD ["node", "apps/ms-users/dist/index.js"]
+# Ejecutamos el archivo generado en la carpeta del gateway
+CMD ["node", "apps/ms-gateway/dist/index.js"]
