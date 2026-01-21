@@ -1,15 +1,18 @@
 ﻿FROM node:18-alpine
 WORKDIR /app
 
+# Copiamos los archivos de la raíz
 COPY package*.json ./
 COPY turbo.json ./
 
+# Instalamos dependencias
 RUN npm install
 
+# Copiamos todo el código
 COPY . .
 
-# Filtro para USERS
-RUN npm run build --filter=ms-users
+# CONSTRUCCIÓN DIRECTA (Sin depender de filtros complejos)
+RUN cd apps/ms-users && npm install && npm run build
 
-# Ruta para USERS
+# EJECUCIÓN (Apunta directamente al archivo generado)
 CMD ["node", "apps/ms-users/dist/index.js"]

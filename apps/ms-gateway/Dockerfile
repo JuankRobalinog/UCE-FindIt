@@ -1,18 +1,17 @@
 ﻿FROM node:18-alpine
 WORKDIR /app
 
-# Copiamos archivos base de la raíz
+# Copiamos archivos de la raíz para las dependencias
 COPY package*.json ./
 COPY turbo.json ./
 
-# Instalamos todas las dependencias del monorepo
+# Instalamos dependencias (esto instalará Express)
 RUN npm install
 
-# Copiamos el resto del código
+# Copiamos todo el código del proyecto
 COPY . .
 
-# Compilamos específicamente el GATEWAY
-RUN npm run build --filter=ms-gateway
-
-# Ejecutamos el archivo generado en la carpeta del gateway
-CMD ["node", "apps/ms-gateway/dist/index.js"]
+# ¡CAMBIO CLAVE!: No usamos 'npm run build' porque no existe en tu JSON.
+# Simplemente verificamos que el archivo está en su lugar y lo lanzamos.
+# Según tu captura, el archivo está en: apps/ms-gateway/index.js
+CMD ["node", "apps/ms-gateway/index.js"]
