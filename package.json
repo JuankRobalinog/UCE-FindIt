@@ -6,11 +6,14 @@
     "apps/*",
     "packages/*"
   ],
- "scripts": {
-  "build": "turbo build",
-  "dev": "turbo dev"
-},
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev"
+  },
   "devDependencies": {
     "turbo": "latest"
+  },
+  "dependencies": {
+    "redis": "^5.10.0"
   }
 }

@@ -40,3 +40,16 @@ services:
 networks:
   uce-network:
     driver: bridge
+
+    services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  
+  api-items:
+    build: ./items-service
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
