@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # --- API GATEWAY (La puerta de entrada) ---
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/ms-gateway/Dockerfile
+    ports:
+      - "80:8080" # Mapeamos el puerto 80 (web) al 8080 del gateway
+    environment:
+      - NODE_ENV=production
+    networks:
+      - uce-network
+    restart: always
+
+  # --- MICROSERVICIO DE OBJETOS ---
+  ms-items:
+    build:
+      context: .
+      dockerfile: ./apps/ms-items/Dockerfile
+    environment:
+      - PORT=3001
+    networks:
+      - uce-network
+    restart: always
+
+  # --- MICROSERVICIO DE USUARIOS ---
+  ms-users:
+    build:
+      context: .
+      dockerfile: ./apps/ms-users/Dockerfile
+    environment:
+      - PORT=3002
+    networks:
+      - uce-network
+    restart: always
+
+# Red interna para que los microservicios se hablen entre ellos
+networks:
+  uce-network:
+    driver: bridge
+
+    services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  
+  api-items:
+    build: ./items-service
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis

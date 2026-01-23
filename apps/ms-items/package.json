@@ -1,0 +1,12 @@
+﻿{
+    "main":  "index.js",
+    "name":  "ms-items",
+    "version":  "1.0.0",
+    "dependencies":  {
+                         "express":  "^4.18.2"
+                     },
+    "scripts":  {
+                    "start":  "node index.js",
+                    "dev":  "node index.js"
+                }
+}

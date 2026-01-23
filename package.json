@@ -1,0 +1,19 @@
+{
+  "name": "uce-findit",
+  "private": true,
+  "packageManager": "npm@10.2.3",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev"
+  },
+  "devDependencies": {
+    "turbo": "latest"
+  },
+  "dependencies": {
+    "redis": "^5.10.0"
+  }
+}
